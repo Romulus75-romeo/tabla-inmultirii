@@ -10,19 +10,22 @@ class StudentDashboard {
     show() {
         this.progress = JSON.parse(localStorage.getItem('multiplicationProgress')) || this.getDefaultProgress();
 
-        // Always ensure modal exists
+        // Get or create modal
         let modal = document.getElementById('studentDashboardModal');
         if (!modal) {
             this.createModal();
             modal = document.getElementById('studentDashboardModal');
         }
 
+        // Update content
         this.updateContent();
 
-        // Force reflow to ensure CSS transition works
-        setTimeout(() => {
-            modal.classList.add('active');
-        }, 10);
+        // FORCE display using styles - bypass CSS classes issues
+        modal.style.display = 'flex';
+        modal.style.opacity = '1';
+        modal.classList.add('active');
+
+        console.log('Dashboard modal opened - display:', modal.style.display);
     }
 
     getDefaultProgress() {
