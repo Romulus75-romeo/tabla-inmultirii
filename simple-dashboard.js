@@ -1,133 +1,122 @@
 // ============================================
-// SIMPLE Student Dashboard - Direct DOM Manipulation
+// SIMPLE Student Dashboard - Robust Version
 // ============================================
 
 function showStudentDashboard() {
-    console.log('showStudentDashboard called');
+    console.log('showStudentDashboard v2 called');
 
-    // Get progress
-    const progress = JSON.parse(localStorage.getItem('multiplicationProgress')) || {
-        learnedTables: [],
-        badges: [],
-        totalStars: 0,
-        gamesPlayed: 0
-    };
-
-    // Create overlay
-    let overlay = document.getElementById('dashboardOverlay');
-    if (!overlay) {
-        overlay = document.createElement('div');
-        overlay.id = 'dashboardOverlay';
-        overlay.style.cssText = `
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.8);
-            z-index: 9999;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        `;
-        document.body.appendChild(overlay);
+    // Get progress safely
+    let progress;
+    try {
+        progress = JSON.parse(localStorage.getItem('multiplicationProgress')) || {};
+    } catch (e) {
+        progress = {};
     }
 
-    // Create content
-    const learnedCount = progress.learnedTables.length;
-    const progressPercent = (learnedCount / 10) * 100;
+    // Defaults
+    progress.learnedTables = progress.learnedTables || [];
+    progress.badges = progress.badges || [];
+    progress.totalStars = progress.totalStars || 0;
+    progress.gamesPlayed = progress.gamesPlayed || 0;
 
-    overlay.innerHTML = `
-        <div style="
-            background: white;
-            padding: 2rem;
-            border-radius: 15px;
-            max-width: 800px;
-            max-height: 90vh;
-            overflow-y: auto;
-            position: relative;
-        ">
-            <button onclick="document.getElementById('dashboardOverlay').remove()" style="
-                position: absolute;
-                top: 1rem;
-                right: 1rem;
-                background: #ff4444;
-                color: white;
-                border: none;
-                width: 40px;
-                height: 40px;
-                border-radius: 50%;
-                cursor: pointer;
-                font-size: 20px;
-            ">✖</button>
-            
-            <h1 style="text-align: center; color: #FF6B6B; font-size: 2rem; margin-bottom: 1rem;">
-                🎉 Tabloul Tău de Campion!
-            </h1>
-            
-            <div style="background: linear-gradient(135deg, #667eea, #764ba2); color: white; padding: 2rem; border-radius: 10px; text-align: center; margin-bottom: 2rem;">
-                <div style="font-size: 3rem; font-weight: bold;">${learnedCount}/10</div>
-                <div style="font-size: 1.2rem;">Table Învățate</div>
-                <div style="background: rgba(255,255,255,0.3); height: 10px; border-radius: 5px; margin: 1rem 0;">
-                    <div style="background: white; height: 100%; width: ${progressPercent}%; border-radius: 5px;"></div>
-                </div>
-                <div style="font-size: 1.1rem; margin-top: 1rem;">
-                    ${learnedCount === 0 ? 'Hai să începem aventura! 🚀' :
-            learnedCount < 5 ? `Super început! Mai ${10 - learnedCount} table! 💪` :
-                learnedCount < 10 ? `Ești aproape campion! Încă ${10 - learnedCount}! 🏆` :
-                    '🎊 CAMPION ABSOLUT! Ai învățat toate tablele!'}
-                </div>
+    // Remove existing overlay if any
+    const existing = document.getElementById('dashboardOverlay');
+    if (existing) existing.remove();
+
+    // Create overlay
+    const overlay = document.createElement('div');
+    overlay.id = 'dashboardOverlay';
+    // FORCE styles using specific properties
+    overlay.style.position = 'fixed';
+    overlay.style.top = '0';
+    overlay.style.left = '0';
+    overlay.style.width = '100vw';
+    overlay.style.height = '100vh';
+    overlay.style.backgroundColor = 'rgba(0, 0, 0, 0.85)';
+    overlay.style.zIndex = '2147483647'; // Max z-index
+    overlay.style.display = 'block'; // Simple block
+
+    // Create Content Container (Absolute Centering)
+    const container = document.createElement('div');
+    container.style.position = 'absolute';
+    container.style.top = '50%';
+    container.style.left = '50%';
+    container.style.transform = 'translate(-50%, -50%)';
+    container.style.backgroundColor = '#ffffff';
+    container.style.borderRadius = '20px';
+    container.style.padding = '20px';
+    container.style.width = '90%';
+    container.style.maxWidth = '600px';
+    container.style.maxHeight = '90vh';
+    container.style.overflowY = 'auto';
+    container.style.boxShadow = '0 0 50px rgba(0,0,0,0.5)';
+    container.style.fontFamily = 'sans-serif';
+    container.style.textAlign = 'center';
+
+    // Stats calculation
+    const learnedCount = progress.learnedTables.length;
+    const progressPercent = Math.min(100, (learnedCount / 10) * 100);
+
+    // HTML Content
+    container.innerHTML = `
+        <div style="text-align: right;">
+            <button id="closeDashBtn" style="background:none; border:none; font-size: 30px; cursor:pointer;">❌</button>
+        </div>
+        
+        <h1 style="color: #FF6B6B; margin-top: 0; font-size: 28px;">🎉 Tabloul Tău</h1>
+        
+        <div style="background: #4ECDC4; color: white; padding: 20px; border-radius: 15px; margin-bottom: 20px;">
+            <h2 style="margin:0; font-size: 40px;">${learnedCount} / 10</h2>
+            <p style="margin:5px 0 0 0;">Table Învățate</p>
+            <div style="background: rgba(255,255,255,0.4); height: 15px; border-radius: 10px; margin-top: 10px; overflow: hidden;">
+                <div style="background: white; height: 100%; width: ${progressPercent}%;"></div>
             </div>
-            
-            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 1rem; margin-bottom: 2rem;">
-                <div style="background: linear-gradient(135deg, #FFE66D, #FFC93C); padding: 1.5rem; border-radius: 10px; text-align: center;">
-                    <div style="font-size: 2.5rem;">⭐</div>
-                    <div style="font-size: 2rem; font-weight: bold;">${progress.totalStars || 0}</div>
-                    <div>Stele</div>
-                </div>
-                <div style="background: linear-gradient(135deg, #95E1D3, #5FD4C1); padding: 1.5rem; border-radius: 10px; text-align: center;">
-                    <div style="font-size: 2.5rem;">🏅</div>
-                    <div style="font-size: 2rem; font-weight: bold;">${progress.badges?.length || 0}/15</div>
-                    <div>Badge-uri</div>
-                </div>
-                <div style="background: linear-gradient(135deg, #A78BFA, #8B5CF6); padding: 1.5rem; border-radius: 10px; text-align: center; color: white;">
-                    <div style="font-size: 2.5rem;">🎮</div>
-                    <div style="font-size: 2rem; font-weight: bold;">${progress.gamesPlayed || 0}</div>
-                    <div>Jocuri</div>
-                </div>
+        </div>
+        
+        <div style="display: flex; justify-content: space-around; margin-bottom: 20px;">
+            <div style="flex: 1; margin: 0 5px; background: #FFE66D; padding: 10px; border-radius: 10px;">
+                <div style="font-size: 24px;">⭐</div>
+                <div style="font-weight:bold; font-size: 20px;">${progress.totalStars}</div>
+                <div style="font-size: 12px;">Stele</div>
             </div>
-            
-            <div style="text-align: center; margin-top: 2rem;">
-                <button onclick="document.getElementById('dashboardOverlay').remove(); showTab('learn')" style="
-                    background: linear-gradient(135deg, #4ECDC4, #44A08D);
-                    color: white;
-                    border: none;
-                    padding: 1rem 2rem;
-                    border-radius: 10px;
-                    font-size: 1.2rem;
-                    font-weight: bold;
-                    cursor: pointer;
-                    margin: 0.5rem;
-                ">🚀 Hai să Învățăm!</button>
-                
-                <button onclick="document.getElementById('dashboardOverlay').remove(); showTab('games')" style="
-                    background: linear-gradient(135deg, #667eea, #764ba2);
-                    color: white;
-                    border: none;
-                    padding: 1rem 2rem;
-                    border-radius: 10px;
-                    font-size: 1.2rem;
-                    font-weight: bold;
-                    cursor: pointer;
-                    margin: 0.5rem;
-                ">🎮 Hai să Jucăm!</button>
+            <div style="flex: 1; margin: 0 5px; background: #FF6B6B; color: white; padding: 10px; border-radius: 10px;">
+                <div style="font-size: 24px;">🏅</div>
+                <div style="font-weight:bold; font-size: 20px;">${progress.badges.length}</div>
+                <div style="font-size: 12px;">Badge-uri</div>
             </div>
+            <div style="flex: 1; margin: 0 5px; background: #95E1D3; padding: 10px; border-radius: 10px;">
+                <div style="font-size: 24px;">🎮</div>
+                <div style="font-weight:bold; font-size: 20px;">${progress.gamesPlayed}</div>
+                <div style="font-size: 12px;">Jocuri</div>
+            </div>
+        </div>
+        
+        <div style="margin-top: 20px;">
+            <button id="goLearnBtn" style="background: #FF6B6B; color: white; border: none; padding: 15px 30px; border-radius: 50px; font-size: 18px; font-weight: bold; cursor: pointer; margin-bottom: 10px; width: 100%;">
+                🚀 Hai să Învățăm!
+            </button>
+            <button id="goPlayBtn" style="background: #4ECDC4; color: white; border: none; padding: 15px 30px; border-radius: 50px; font-size: 18px; font-weight: bold; cursor: pointer; width: 100%;">
+                🎮 Hai să Jucăm!
+            </button>
         </div>
     `;
 
-    overlay.style.display = 'flex';
-    console.log('Dashboard displayed');
+    overlay.appendChild(container);
+    document.body.appendChild(overlay);
+
+    // Add Event Listeners
+    document.getElementById('closeDashBtn').onclick = () => overlay.remove();
+
+    document.getElementById('goLearnBtn').onclick = () => {
+        overlay.remove();
+        if (typeof showTab === 'function') showTab('learn');
+    };
+
+    document.getElementById('goPlayBtn').onclick = () => {
+        overlay.remove();
+        if (typeof showTab === 'function') showTab('games');
+    };
 }
 
-// Make it global
+// Ensure it's global
 window.showStudentDashboard = showStudentDashboard;
