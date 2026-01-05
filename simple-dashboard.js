@@ -36,22 +36,22 @@ function showStudentDashboard() {
     overlay.style.zIndex = '2147483647'; // Max z-index
     overlay.style.display = 'block'; // Simple block
 
-    // Create Content Container (Absolute Centering)
     const container = document.createElement('div');
-    container.style.position = 'absolute';
-    container.style.top = '50%';
-    container.style.left = '50%';
-    container.style.transform = 'translate(-50%, -50%)';
-    container.style.backgroundColor = '#ffffff';
-    container.style.borderRadius = '20px';
-    container.style.padding = '20px';
-    container.style.width = '90%';
-    container.style.maxWidth = '600px';
-    container.style.maxHeight = '90vh';
-    container.style.overflowY = 'auto';
-    container.style.boxShadow = '0 0 50px rgba(0,0,0,0.5)';
-    container.style.fontFamily = 'sans-serif';
-    container.style.textAlign = 'center';
+    container.style.cssText = `
+        position: relative !important;
+        background-color: #ffffff !important;
+        border-radius: 20px !important;
+        padding: 20px !important;
+        width: 90% !important;
+        max-width: 600px !important;
+        max-height: 90vh !important;
+        overflow-y: auto !important;
+        box-shadow: 0 0 50px rgba(0,0,0,0.8) !important;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif !important;
+        text-align: center !important;
+        z-index: 2147483647 !important;
+        margin: auto !important;
+    `;
 
     // Stats calculation
     const learnedCount = progress.learnedTables.length;
