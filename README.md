@@ -38,6 +38,15 @@
 - Rapoarte printabile
 - Opțiune resetare progres
 
+### 🎨 Funcționalități Avansate
+- **🔊 Narator Vocal** - Text-to-Speech în română cu control volum
+- **🎭 Teme Sezoniere** - 6 teme (Standard, Crăciun, Halloween, Paște, Școală, Vară)
+- **⚔️ Multiplayer Local** - 2 jucători pe același dispozitiv
+- **📊 Grafice de Progres** - Vizualizare detaliată cu Chart.js
+- **📅 Antrenament Zilnic** - Streak tracking și recomandări personalizate
+- **📱 PWA** - Instalabil pe telefon/desktop, funcționare offline
+- **📄 Fișe de Lucru** - Generator PDF pentru printare
+
 ## 🚀 Demo Live
 
 **[Joacă Acum!](https://romulus75-romeo.github.io/tabla-inmultirii/)** *(după deployment)*
@@ -88,9 +97,17 @@ tabla-inmultirii/
 ├── game-circus.js
 ├── game-rocket.js
 ├── duel.js                      # Mod duel
+├── multiplayer.js               # Multiplayer local
 ├── dashboard.js                 # Dashboard părinți
+├── daily-training.js            # Antrenament zilnic
+├── progress-charts.js           # Grafice progres (Chart.js)
 ├── certificate-generator.js     # Generator certificate
+├── worksheet-generator.js       # Generator fișe PDF
+├── voice-narrator.js            # Narator vocal (TTS)
+├── seasonal-themes.js           # Teme sezoniere
 ├── rewards.js                   # Sistem recompense
+├── manifest.json                # PWA manifest
+├── service-worker.js            # PWA service worker
 ├── robots.txt                   # SEO
 ├── sitemap.xml                  # SEO
 └── assets/
@@ -168,11 +185,12 @@ Acest proiect este open-source și disponibil gratuit pentru uz educațional.
 ## 💡 Viitor
 
 Idei pentru versiuni viitoare:
-- [ ] Efecte sonore și narațiuni
-- [ ] Mod multi-player local
-- [ ] Teme sezoniere (Crăciun, Paști)
-- [ ] Traducere în alte limbi
-- [ ] Backend pentru statistici globale
+- [ ] Efecte sonore complete (muzică fundal, SFX pentru butoane)
+- [ ] Mod Aventură/Poveste cu Rică Ratonul
+- [ ] Dashboard dedicat pentru elevi (tablou de campioni)
+- [ ] Traducere în alte limbi (Engleză, Franceză)
+- [ ] Backend cu leaderboard global
+- [ ] Sistem de achievements extins
 
 ## 🙏 Mulțumiri
 
