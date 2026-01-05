@@ -10,13 +10,19 @@ class StudentDashboard {
     show() {
         this.progress = JSON.parse(localStorage.getItem('multiplicationProgress')) || this.getDefaultProgress();
 
-        const modal = document.getElementById('studentDashboardModal');
+        // Always ensure modal exists
+        let modal = document.getElementById('studentDashboardModal');
         if (!modal) {
             this.createModal();
+            modal = document.getElementById('studentDashboardModal');
         }
 
         this.updateContent();
-        document.getElementById('studentDashboardModal').classList.add('active');
+
+        // Force reflow to ensure CSS transition works
+        setTimeout(() => {
+            modal.classList.add('active');
+        }, 10);
     }
 
     getDefaultProgress() {
